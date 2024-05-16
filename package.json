@@ -1,21 +1,84 @@
 {
   "name": "build-filter",
   "displayName": "build-filter",
-  "description": "Nuild runner with build-filter and fvm",
-  "version": "0.0.1",
+  "description": "Build runner with build-filter and fvm",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.89.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smirnovdevel/build-filter"
+  },
+  "keywords": [
+    "build_runner",
+    "freezed",
+    "dart",
+    "flutter",
+    "build"
+  ],
+  "icon": "assets/builder.png",
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "workspaceContains:**/pubspec.yaml"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "build-filter.helloWorld",
-        "title": "Hello World"
+        "command": "build-runner.build",
+        "title": "Build Runner: Build"
+      }
+    ],
+    "configuration": {
+      "title": "Build Runner",
+      "properties": {
+        "build-runner.commandToUse": {
+          "type": "string",
+          "enum": [
+            "fvm flutter",
+            "fvm dart"
+          ],
+          "default": "fvm dart",
+          "markdownDescription": "Choose which command to use to run `build_runner` commands."
+        },
+        "build-runner.flutterPath": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "markdownDescription": "The path to Flutter's executable. Make sure to set this on Linux if you installed Flutter using snap. On Linux, `echo \"$(flutter sdk-path)/bin/flutter\"` returns the path you should set.",
+          "scope": "machine-overridable"
+        },
+        "build-runner.useDeleteConflictingOutputs.build": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Use `--delete-conflicting-outputs` for the `build_runner build` command."
+        },
+        "build-runner.useDeleteConflictingOutputs.watch": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Use `--delete-conflicting-outputs` for the `build_runner watch` command."
+        },
+        "build-runner.inferCommandToUse": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Infer whether to use `flutter` or `dart` based on the content of your project's `pubspec.yaml` file."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "build-runner.build",
+        "key": "Ctrl+Shift+B",
+        "mac": "Cmd+Shift+B"
+      },
+      {
+        "command": "build-runner.build_filters",
+        "key": "Ctrl+Shift+G",
+        "mac": "Cmd+Shift+G"
       }
     ]
   },
@@ -25,20 +88,27 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.89.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
+    "@types/vscode": "^1.89.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.3.9"
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "mocha": "^9.1.4",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "rimraf": "^5.0.7"
+  },
+  "overrides": {
+    "minimatch": "5.1.2",
+    "glob": "8.1.0"
   }
 }

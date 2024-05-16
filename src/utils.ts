@@ -22,7 +22,7 @@ export function command(shellCommand: DartFlutterCommand): string {
 
 export const output = vscode.window.createOutputChannel("Build Runner");
 
-const extensionID = "build-runner";
+const extensionID = "build-filter";
 export const COMMANDS = {
   watch: `${extensionID}.watch`,
   build: `${extensionID}.build`,
